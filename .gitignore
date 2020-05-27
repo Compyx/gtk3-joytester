@@ -1,5 +1,5 @@
-*swp
-src/*swp
+*.swp
+src/*.swp
 *~
 *.o
 builddir
