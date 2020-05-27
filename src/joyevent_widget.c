@@ -30,7 +30,7 @@ static const char *labels[] = {
 
 
 
-static bool poll_joystick(joy_info_t *joyinfo);
+static bool poll_joystick(unsigned int index);
 
 
 static GtkWidget *joydevice_label = NULL;
@@ -115,9 +115,6 @@ GtkWidget *joyevent_widget_create(unsigned int index)
     joybutton_label = create_label("<none>");
     gtk_grid_attach(GTK_GRID(grid), joybutton_label, 1, 6, 1, 1);
  
-    /* for fun: */
-    poll_joystick(joyinfo);
-
 
     gtk_widget_show_all(grid);
     return grid;
@@ -126,29 +123,17 @@ GtkWidget *joyevent_widget_create(unsigned int index)
 
 bool joyevent_widget_update(unsigned int index)
 {
-    return poll_joystick(joylist_get_joyinfo(index));
+    return poll_joystick(index);
 }
 
 
 
-static bool poll_joystick(joy_info_t *joyinfo)
+static bool poll_joystick(unsigned int index)
 {
-
     struct js_event e;
-    int fd;
     gchar buffer[1024];
 
-    if (joyinfo == NULL || joyinfo->dev == NULL) {
-        return false;
-    }
-#if 0
-    printf("Polling %s\n", joyinfo->name);
-#endif
-    fd = joyinfo->fd;
-
-    if (read(fd, &e, sizeof(e)) != sizeof(e)) {
-        printf("failed to read joy info\n");
-        close(fd);
+    if (!joy_poll(index, &e)) {
         return false;
     }
 

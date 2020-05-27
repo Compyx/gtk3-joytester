@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <assert.h>
 #include <linux/joystick.h>
 #include <sys/types.h>
@@ -44,7 +45,7 @@ void joylist_create(void)
 
     for (i = 0; i < NUM_JOYS; i++) {
         snprintf(devname, sizeof(devname), "/dev/input/js%d", i);
-        fd = open(devname, O_RDONLY);
+        fd = open(devname, O_RDONLY|O_NONBLOCK);
         if (fd < 0) {
             fprintf(stderr, "failed to open '%s'\n", devname);
         } else {
@@ -76,3 +77,14 @@ void joylist_create(void)
     }
 }
 
+
+bool joy_poll(unsigned int index, struct js_event *event)
+{
+    joy_info_t *info = joylist_get_joyinfo(index);
+    int fd = info->fd;
+
+    if (read(fd, event, sizeof(*event)) != sizeof(*event)) {
+        return false;
+    }
+    return true;
+}

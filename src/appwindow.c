@@ -28,8 +28,6 @@ GtkWidget *app_window_create(GtkApplication *app)
     GtkWidget *window;
     GtkWidget *grid;
     GtkWidget *label;
-    GtkWidget *log;
-    GtkWidget *event;
 
     window = gtk_application_window_new(app);
     gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
