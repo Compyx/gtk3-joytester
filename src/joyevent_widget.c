@@ -22,10 +22,10 @@
 static const char *labels[] = {
     "device path",
     "device name",
-    "imestamp",
+    "timestamp",
     "value",
     "type",
-    "axis/button mumber"
+    "axis/button number"
 };
 
 
@@ -142,7 +142,7 @@ static bool poll_joystick(unsigned int index)
     gtk_label_set_text(GTK_LABEL(joytimestamp_label), buffer);
 
     /* handle event value */
-    g_snprintf(buffer, sizeof(buffer), "$%02x", e.type);
+    g_snprintf(buffer, sizeof(buffer), "$%02x", e.value);
     gtk_label_set_text(GTK_LABEL(joyvalue_label), buffer);
 
     /* handle event type */

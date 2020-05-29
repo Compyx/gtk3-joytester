@@ -20,8 +20,10 @@ typedef struct joy_info_s {
 } joy_info_t;
 
 
-joy_info_t *joylist_get_joyinfo(unsigned int index);
 void joylist_create(void);
+void joylist_destroy(void);
+
+joy_info_t *joylist_get_joyinfo(unsigned int index);
 bool joy_poll(unsigned int index, struct js_event *event);
 
 #endif

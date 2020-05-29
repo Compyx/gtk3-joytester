@@ -45,7 +45,11 @@ void joylist_create(void)
 
     for (i = 0; i < NUM_JOYS; i++) {
         snprintf(devname, sizeof(devname), "/dev/input/js%d", i);
+#if 0
         fd = open(devname, O_RDONLY|O_NONBLOCK);
+#else
+        fd = open(devname, O_RDONLY);
+#endif
         if (fd < 0) {
             fprintf(stderr, "failed to open '%s'\n", devname);
         } else {
