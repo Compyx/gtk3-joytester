@@ -19,7 +19,8 @@ src = ['src/main.c',
        'src/appwindow.c',
        'src/joy_linux.c',
        'src/joylist_widget.c',
-       'src/joyevent_widget.c']
+       'src/joyevent_widget.c',
+       'src/axissliderwidget.c']
 
 # declare executable and its sources and libraries
 executable('gtk3-joytester',

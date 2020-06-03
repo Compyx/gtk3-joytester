@@ -41,9 +41,7 @@ static gboolean on_io_watch(GIOChannel *chan,
 {
     if (cond & G_IO_IN) {
         /* new data arrived */
-#if 0
         g_print("Got G_IO_IN\n");
-#endif
         joyevent_widget_update(0);
         return TRUE;
     } else if (cond & G_IO_HUP) {

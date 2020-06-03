@@ -15,6 +15,7 @@
 #include <fcntl.h>
 
 #include "joy_linux.h"
+#include "axissliderwidget.h"
 
 #include "joyevent_widget.h"
 
@@ -42,6 +43,8 @@ static GtkWidget *joyvalue_label = NULL;
 
 static unsigned int joyindex = 0;
 
+
+static GtkWidget *axis_widgets[8];
 
 
 static gchar *get_event_type_desc(unsigned int e)
@@ -80,7 +83,7 @@ GtkWidget *joyevent_widget_create(unsigned int index)
     GtkWidget *label;
     size_t i;
     joyindex = index;
-
+    int a;
     joy_info_t *joyinfo = joylist_get_joyinfo(index);
 
 
@@ -109,12 +112,16 @@ GtkWidget *joyevent_widget_create(unsigned int index)
     gtk_grid_attach(GTK_GRID(grid), joyvalue_label, 1, 4, 1, 1);
 
 
-   joyevent_label = create_label("<none>");
+    joyevent_label = create_label("<none>");
     gtk_grid_attach(GTK_GRID(grid), joyevent_label, 1, 5, 1, 1);
 
     joybutton_label = create_label("<none>");
     gtk_grid_attach(GTK_GRID(grid), joybutton_label, 1, 6, 1, 1);
- 
+
+    for (a = 0; a < 8; a++) {
+        axis_widgets[a] = axis_slider_widget_new(a);
+        gtk_grid_attach(GTK_GRID(grid), axis_widgets[a], 0, 7 + a, 2, 1);
+    }
 
     gtk_widget_show_all(grid);
     return grid;
@@ -154,6 +161,12 @@ static bool poll_joystick(unsigned int index)
     g_snprintf(buffer, sizeof(buffer), "$%02x", e.number);
     gtk_label_set_text(GTK_LABEL(joybutton_label), buffer);
 
+    if (e.type & JS_EVENT_AXIS) {
+        if (e.number < 8) {
+            g_print("axis 0: value %d\n", e.value);
+            axis_slider_widget_update(axis_widgets[e.number], e.value);
+        }
+    }
 
     return true;
 }
